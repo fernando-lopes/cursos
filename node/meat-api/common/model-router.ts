@@ -56,7 +56,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
         const skip = (page - 1) * this.pageSize
 
-        this.model.count({}).exec().then(count => {
+        this.model.countDocuments({}).exec().then(count => {
             this.model.find()
                 .skip(skip)
                 .limit(this.pageSize)
@@ -82,7 +82,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     replace = (req, resp, next) => {
         const options = {
             runValidators: true,
-            overwrite: true
+            overwrite: true,
         }
         this.model.update({
             _id: req.params.id
@@ -98,7 +98,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     update = (req, resp, next) => {
         const options = {
             runValidators: true,
-            new: true
+            new: true,
         }
         this.model.findByIdAndUpdate({
             _id: req.params.id
@@ -106,7 +106,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     }
 
     delete = (req, resp, next) => {
-        this.model.remove({ _id: req.params.id }).exec().then(result => {
+        this.model.deleteOne({ _id: req.params.id }).exec().then(result => {
             if (result.n) {
                 resp.send(204)
             } else {
