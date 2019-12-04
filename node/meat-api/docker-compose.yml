@@ -10,6 +10,22 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - /home/fernando_lopes/workspace/cursos/node/meat-mongodb:/data/db
+      - ./data/db:/data/db
     ports:
       - 2717:27017
+  
+  api:
+    container_name: meat-api
+    build: '.'
+    volumes:
+      - ./dist/:/app
+      - ./node_modules:/app/node_modules
+    environment: 
+      NODE_ENV: development
+      DB_URL: mongodb://db/meat-api
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 3000:3000
